@@ -1,6 +1,7 @@
 import 'package:chat_app/core/constants/string.dart';
 import 'package:chat_app/core/constants/themes/colors.dart';
 import 'package:chat_app/core/constants/themes/style.dart';
+import 'package:chat_app/core/services/auth/auth_service.dart';
 import 'package:chat_app/ui/widget/custom_button.dart';
 import 'package:chat_app/ui/widget/custom_textfield_widget.dart';
 import 'package:chat_app/ui/widget/custom_textwidget.dart';
@@ -12,6 +13,9 @@ class SigninScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthService authService = AuthService();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -32,7 +36,21 @@ class SigninScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               height: 50.sp,
-              child: CustomButton(text: "Sign In", onPressed: () {}),
+              child: CustomButton(
+                text: "Sign In",
+                onPressed: () async {
+                  try {
+                    await authService.signInWithEmailAndPassword(
+                      email: emailController.text,
+                      password: passwordController.text,
+                      context: context,
+                    );
+                    Navigator.pushNamed(context, routeHome);
+                  } catch (e) {
+                    print('Error: $e');
+                  }
+                },
+              ),
             ),
 
             20.verticalSpace,
